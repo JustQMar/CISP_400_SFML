@@ -4,6 +4,9 @@
 x64
 x86
 
+git config --global user.email "w1956832@apps.losrios.edu"
+git config --global user.name "Justin Mariano"
+
 # Prerequisites
 *.d
 
