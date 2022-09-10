@@ -43,6 +43,9 @@ int main()
 		{
 			window.close();
 		}
+		if (Keyboard::isKeyPressed(Keyboard::Left)){
+			cout<<"clicked";
+		}
 
 		/*
 		****************************************
