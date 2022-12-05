@@ -103,36 +103,20 @@ int main()
 			{
 				player.moveUp();
 			}
-			else
-			{
-				//player.stopUp();
-			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				player.moveDown();
-			}
-			else
-			{
-				//player.stopDown();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				player.moveLeft();
 			}
-			else
-			{
-				//player.stopLeft();
-			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
-			}
-			else
-			{
-				//player.stopRight();
 			}
 
 		}// End WASD while playing
