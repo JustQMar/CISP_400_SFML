@@ -26,15 +26,22 @@ int main()
 	Time gameTimeTotal;
 
 	// Where is the mouse in relation to world coordinates
-	Vector2f mouseWorldPosition;
+	//Vector2f mouseWorldPosition;
 	// Where is the mouse in relation to screen coordinates
-	Vector2i mouseScreenPosition;
+	//Vector2i mouseScreenPosition;
 
 	// Create an instance of the Player class
 	Snake player;
 
 	// The boundaries of the arena
 	IntRect arena;
+
+	// Create a texture to hold a graphic on the GPU
+	Texture textureBackground;
+	textureBackground.loadFromFile("graphics/grass.png");
+	Sprite spriteBackground;
+	spriteBackground.setTexture(textureBackground);
+	spriteBackground.setPosition(0, 0);
 
 	// The main game loop
 	while (window.isOpen())
@@ -199,11 +206,11 @@ int main()
 			float dtAsSeconds = dt.asSeconds();
 
 			// Where is the mouse pointer
-			mouseScreenPosition = Mouse::getPosition();
+			//mouseScreenPosition = Mouse::getPosition();
 
 			// Convert mouse position to world coordinates of mainView
-			mouseWorldPosition = window.mapPixelToCoords(
-				Mouse::getPosition(), mainView);
+			//mouseWorldPosition = window.mapPixelToCoords(
+				//Mouse::getPosition(), mainView);
 
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition());
@@ -228,7 +235,8 @@ int main()
 			// set the mainView to be displayed in the window
 			// And draw everything related to it
 			window.setView(mainView);
-
+			// Draw the background
+			window.draw(spriteBackground);
 			// Draw the player
 			window.draw(player.getSprite());
 		}
