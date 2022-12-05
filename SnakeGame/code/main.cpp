@@ -105,7 +105,7 @@ int main()
 			}
 			else
 			{
-				player.stopUp();
+				//player.stopUp();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
@@ -114,7 +114,7 @@ int main()
 			}
 			else
 			{
-				player.stopDown();
+				//player.stopDown();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
@@ -123,7 +123,7 @@ int main()
 			}
 			else
 			{
-				player.stopLeft();
+				//player.stopLeft();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
@@ -132,7 +132,7 @@ int main()
 			}
 			else
 			{
-				player.stopRight();
+				//player.stopRight();
 			}
 
 		}// End WASD while playing
@@ -141,32 +141,7 @@ int main()
 		if (state == State::LEVELING_UP)
 		{
 			// Handle the player levelling up
-			if (event.key.code == Keyboard::Num1)
-			{
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num2)
-			{
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num3)
-			{
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num4)
-			{
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num5)
-			{
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num6)
+			if (event.key.code == Keyboard::Enter)
 			{
 				state = State::PLAYING;
 			}

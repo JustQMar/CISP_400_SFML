@@ -91,14 +91,14 @@ public:
 	void moveDown();
 
 	// Stop the player moving in a specific direction
+
+	/*
 	void stopLeft();
-
 	void stopRight();
-
 	void stopUp();
-
 	void stopDown();
-
+	*/
+	
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition);
 

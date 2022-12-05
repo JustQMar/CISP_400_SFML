@@ -87,23 +87,37 @@ int Snake::getHealth()
 void Snake::moveLeft()
 {
 	m_LeftPressed = true;
+	m_RightPressed = false;
+	m_UpPressed = false;
+	m_DownPressed = false;
 }
 
 void Snake::moveRight()
 {
 	m_RightPressed = true;
+	m_LeftPressed = false;
+	m_UpPressed = false;
+	m_DownPressed = false;
 }
 
 void Snake::moveUp()
 {
 	m_UpPressed = true;
+	m_RightPressed = false;
+	m_LeftPressed = false;
+	m_DownPressed = false;
+
 }
 
 void Snake::moveDown()
 {
 	m_DownPressed = true;
+	m_UpPressed = false;
+	m_RightPressed = false;
+	m_LeftPressed = false;
 }
 
+/*
 void Snake::stopLeft()
 {
 	m_LeftPressed = false;
@@ -124,6 +138,7 @@ void Snake::stopDown()
 	m_DownPressed = false;
 }
 
+*/
 void Snake::update(float elapsedTime, Vector2i mousePosition)
 {
 
