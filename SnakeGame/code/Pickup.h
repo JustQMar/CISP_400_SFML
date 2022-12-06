@@ -38,7 +38,7 @@ public:
 	Pickup::Pickup();
 
 	// Prepare a new pickup
-	void setArena(IntRect arena);
+	void setArena();//IntRect arena);
 
 	void spawn();
 

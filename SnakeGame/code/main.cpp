@@ -179,22 +179,23 @@ int main()
 			{
 				// Prepare thelevel
 				// We will modify the next two lines later
-				//arena.width = 1870;
-				//arena.height = 1030;
-				//arena.left = 50;
-				//arena.top = 50;
-
 				arena.width = resolution.x - 50;
 				arena.height = resolution.y - 50;
 				arena.left = 50;
 				arena.top = 50;
 
 				// We will modify this line of code later
-				int tileSize = 50;
+				//int tileSize = CreateBackground(background);
 
 				// Spawn the player in the middle of the arena
-				player.spawn(arena, resolution, tileSize);
+				player.spawn(arena, resolution);//, tileSize);
 
+				// Configure the pick-ups
+				//coinPickup.spawn();
+				//coinPickup.setArena();
+				//coinPickup.spawn();
+				
+				
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
 

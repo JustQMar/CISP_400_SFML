@@ -18,7 +18,7 @@ Snake::Snake()
 	m_Sprite.setOrigin(100, 100);
 }
 
-void Snake::spawn(IntRect arena, Vector2f resolution, int tileSize)
+void Snake::spawn(IntRect arena, Vector2f resolution)//, int tileSize)
 {
 	// Place the player in the middle of the arena
 	m_Position.x = arena.width / 2;
