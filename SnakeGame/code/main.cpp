@@ -18,9 +18,6 @@ int main()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
-	float X = VideoMode::getDesktopMode().width;
-	float Y = VideoMode::getDesktopMode().height;
-
 	RenderWindow window(VideoMode(resolution.x, resolution.y),"Snake Game", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
@@ -185,8 +182,8 @@ int main()
 				//arena.left = 50;
 				//arena.top = 50;
 
-				arena.width = X - 50;
-				arena.height = Y - 50;
+				arena.width = resolution.x - 50;
+				arena.height = resolution.y - 50;
 				arena.left = 50;
 				arena.top = 50;
 
