@@ -18,6 +18,9 @@ int main()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
+	float X = VideoMode::getDesktopMode().width;
+	float Y = VideoMode::getDesktopMode().height;
+
 	RenderWindow window(VideoMode(resolution.x, resolution.y),"Snake Game", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
@@ -51,7 +54,7 @@ int main()
 	textureCoin.loadFromFile("graphics/coin.png");
 	Sprite spriteCoin;
 	spriteCoin.setTexture(textureCoin);
-	spriteCoin.setPosition(400, 800);
+	spriteCoin.setPosition(800, 200);
 
 	// Prepare the bomb
 	Texture textureBomb;
@@ -177,11 +180,15 @@ int main()
 			{
 				// Prepare thelevel
 				// We will modify the next two lines later
-				arena.width = 1870;
-				arena.height = 1030;
+				//arena.width = 1870;
+				//arena.height = 1030;
+				//arena.left = 50;
+				//arena.top = 50;
+
+				arena.width = X - 50;
+				arena.height = Y - 50;
 				arena.left = 50;
 				arena.top = 50;
-
 
 				// We will modify this line of code later
 				int tileSize = 50;
