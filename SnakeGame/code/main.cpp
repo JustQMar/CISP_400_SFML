@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 #include "Pickup.h"
+#include "Coin.h"
+#include <SFML/Audio.hpp>
 
 using namespace sf;
 
@@ -23,13 +25,9 @@ int main()
 
 	// Here is our clock for timing everything
 	Clock clock;
+
 	// How long has the PLAYING state been active
 	Time gameTimeTotal;
-
-	// Where is the mouse in relation to world coordinates
-	//Vector2f mouseWorldPosition;
-	// Where is the mouse in relation to screen coordinates
-	//Vector2i mouseScreenPosition;
 
 	// Create an instance of the Player class
 	Snake player;
@@ -47,6 +45,42 @@ int main()
 	// Create a couple of pickups
 	//Pickup healthPickup(1);
 	//Pickup ammoPickup(2);
+
+	// Prepare the coin
+	Texture textureCoin;
+	textureCoin.loadFromFile("graphics/coin.png");
+	Sprite spriteCoin;
+	spriteCoin.setTexture(textureCoin);
+	spriteCoin.setPosition(400, 800);
+
+	// Prepare the bomb
+	Texture textureBomb;
+	textureBomb.loadFromFile("graphics/bomb.png");
+	Sprite spriteBomb;
+	spriteBomb.setTexture(textureBomb);
+	spriteBomb.setPosition(200, 300);
+
+	// Prepare the hit sound
+	SoundBuffer hitBuffer;
+	hitBuffer.loadFromFile("sound/bomb.wav");
+	Sound hit;
+	hit.setBuffer(hitBuffer);
+
+	// Prepare the splat sound
+	SoundBuffer splatBuffer;
+	splatBuffer.loadFromFile("sound/coin.wav");
+	Sound splat;
+	splat.setBuffer(splatBuffer);
+
+	// We will add a ball in the next chapter
+	/*
+	Coin ball(100, 100);
+	bool m_Spawned = true;
+	if (m_Spawned)
+	{
+		Coin (0, 0);
+	}
+	*/
 
 	// The main game loop
 	while (window.isOpen())
@@ -107,21 +141,25 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				player.moveUp();
+				//hit.play();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				player.moveDown();
+				//hit.play();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				player.moveLeft();
+				//hit.play();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
+				//hit.play();
 			}
 
 		}// End WASD while playing
@@ -144,18 +182,17 @@ int main()
 				arena.left = 50;
 				arena.top = 50;
 
+
 				// We will modify this line of code later
 				int tileSize = 50;
 
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
 
-				// Configure the pick-ups
-				//healthPickup.setArena(arena);
-				//ammoPickup.setArena(arena);
-
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
+
+
 			}
 		}// End levelling up
 
@@ -173,25 +210,24 @@ int main()
 			// Make a decimal fraction of 1 from the delta time
 			float dtAsSeconds = dt.asSeconds();
 
-			// Where is the mouse pointer
-			//mouseScreenPosition = Mouse::getPosition();
-
-			// Convert mouse position to world coordinates of mainView
-			//mouseWorldPosition = window.mapPixelToCoords(
-				//Mouse::getPosition(), mainView);
-
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition());
 
 			// Make a note of the players new position
 			Vector2f playerPosition(player.getCenter());
 
-			// Make the view centre around the player				
-			//mainView.setCenter(player.getCenter());
+			//ball.update(dt);
+			/*
+			// Has the ball hit the bat?
+			if (spriteCoin.getPosition().intersects(player.getPosition()))
+			{
+				// Hit detected so reverse the ball and score a point
+				ball.reboundBatOrTop();
+				splat.play();
+				m_Spawned = false;
 
-			// Update the pickups
-			//healthPickup.update(dtAsSeconds);
-			//ammoPickup.update(dtAsSeconds);
+			}
+			*/
 
 		}// End updating the scene
 
@@ -212,19 +248,9 @@ int main()
 			window.draw(spriteBackground);
 			// Draw the player
 			window.draw(player.getSprite());
-
-			/*
-			// Draw the pick-ups, if currently spawned
-			if (ammoPickup.isSpawned())
-			{
-				window.draw(ammoPickup.getSprite());
-			}
-
-			if (healthPickup.isSpawned())
-			{
-				window.draw(healthPickup.getSprite());
-			}
-			*/
+			window.draw(spriteCoin);
+			window.draw(spriteBomb);
+			//window.draw(ball.getShape());
 
 		}
 
