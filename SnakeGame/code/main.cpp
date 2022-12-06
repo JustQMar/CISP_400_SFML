@@ -191,7 +191,6 @@ int main()
 				player.spawn(arena, resolution);//, tileSize);
 
 				// Configure the pick-ups
-				//coinPickup.spawn();
 				//coinPickup.setArena();
 				//coinPickup.spawn();
 				
