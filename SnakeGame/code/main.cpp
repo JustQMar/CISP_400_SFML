@@ -46,6 +46,8 @@ int main()
 	//Pickup healthPickup(1);
 	//Pickup ammoPickup(2);
 
+	Pickup coinPickup();
+
 	// Prepare the coin
 	Texture textureCoin;
 	textureCoin.loadFromFile("graphics/coin.png");
