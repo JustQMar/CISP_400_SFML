@@ -8,14 +8,14 @@ Pickup::Pickup(int type)
     if (m_Type == 1)
     {
         m_Sprite = Sprite(TextureHolder::GetTexture(
-            "graphics/health_pickup.png"));
+            "graphics/coin.png"));
         // How much is pickup worth
         m_Value = HEALTH_START_VALUE;
     }
     else
     {
         m_Sprite = Sprite(TextureHolder::GetTexture(
-            "graphics/ammo_pickup.png"));
+            "graphics/coin.png"));
         // How much is pickup worth
         m_Value = AMMO_START_VALUE;
     }
@@ -58,6 +58,8 @@ bool Pickup::isSpawned()
 {
     return m_Spawned;
 }
+
+
 
 int Pickup::gotIt()
 {

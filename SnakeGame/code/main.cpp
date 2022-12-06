@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
+#include "Pickup.h"
 
 using namespace sf;
 
@@ -15,7 +16,7 @@ int main()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
-	RenderWindow window(VideoMode(resolution.x, resolution.y),"Zombie Arena", Style::Fullscreen);
+	RenderWindow window(VideoMode(resolution.x, resolution.y),"Snake Game", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -42,6 +43,10 @@ int main()
 	Sprite spriteBackground;
 	spriteBackground.setTexture(textureBackground);
 	spriteBackground.setPosition(0, 0);
+
+	// Create a couple of pickups
+	//Pickup healthPickup(1);
+	//Pickup ammoPickup(2);
 
 	// The main game loop
 	while (window.isOpen())
@@ -134,16 +139,20 @@ int main()
 			{
 				// Prepare thelevel
 				// We will modify the next two lines later
-				arena.width = 500;
-				arena.height = 500;
-				arena.left = 0;
-				arena.top = 0;
+				arena.width = 1870;
+				arena.height = 1030;
+				arena.left = 50;
+				arena.top = 50;
 
 				// We will modify this line of code later
 				int tileSize = 50;
 
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
+
+				// Configure the pick-ups
+				//healthPickup.setArena(arena);
+				//ammoPickup.setArena(arena);
 
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
@@ -178,7 +187,12 @@ int main()
 			Vector2f playerPosition(player.getCenter());
 
 			// Make the view centre around the player				
-			mainView.setCenter(player.getCenter());
+			//mainView.setCenter(player.getCenter());
+
+			// Update the pickups
+			//healthPickup.update(dtAsSeconds);
+			//ammoPickup.update(dtAsSeconds);
+
 		}// End updating the scene
 
 		/*
@@ -198,6 +212,20 @@ int main()
 			window.draw(spriteBackground);
 			// Draw the player
 			window.draw(player.getSprite());
+
+			/*
+			// Draw the pick-ups, if currently spawned
+			if (ammoPickup.isSpawned())
+			{
+				window.draw(ammoPickup.getSprite());
+			}
+
+			if (healthPickup.isSpawned())
+			{
+				window.draw(healthPickup.getSprite());
+			}
+			*/
+
 		}
 
 		if (state == State::LEVELING_UP)
