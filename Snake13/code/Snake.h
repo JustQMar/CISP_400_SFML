@@ -5,8 +5,8 @@ class Snake
 {
 private:
 
-    const float START_SPEED = 200;
-    const float START_HEALTH = 100;
+    const float START_SPEED = 500;
+    const float START_HEALTH = 3;
 
     // Where is the player
     Vector2f m_Position;

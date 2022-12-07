@@ -5,9 +5,9 @@ class Pickup
 {
     private:
         //Start value for health pickups
-        const int HEALTH_START_VALUE = 50;
+        const int HEALTH_START_VALUE = 1;
         const int AMMO_START_VALUE = 12;
-        const int START_WAIT_TIME = 10;
+        const int START_WAIT_TIME = 3;
         const int START_SECONDS_TO_LIVE = 5;
 
         // The sprite that represents this pickup
@@ -26,6 +26,9 @@ class Pickup
         float m_SecondsSinceDeSpawn;
         float m_SecondsToLive;
         float m_SecondsToWait;
+
+        int COUNT = 0;
+
         // Public prototypes go here
     public:
         Pickup::Pickup(int type);

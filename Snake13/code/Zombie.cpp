@@ -11,21 +11,21 @@ void Zombie::spawn(float startX, float startY, int type, int seed)
     case 0:
         // Bloater
         m_Sprite = Sprite(TextureHolder::GetTexture(
-            "graphics/bomb.png"));
+            "graphics/bloater.png"));
         m_Speed = BLOATER_SPEED;
         m_Health = BLOATER_HEALTH;
         break;
     case 1:
         // Chaser
         m_Sprite = Sprite(TextureHolder::GetTexture(
-            "graphics/bomb.png"));
+            "graphics/bloater.png"));
         m_Speed = CHASER_SPEED;
         m_Health = CHASER_HEALTH;
         break;
     case 2:
         // Crawler
         m_Sprite = Sprite(TextureHolder::GetTexture(
-            "graphics/bomb.png"));
+            "graphics/bolater.png"));
         m_Speed = CRAWLER_SPEED;
         m_Health = CRAWLER_HEALTH;
         break;

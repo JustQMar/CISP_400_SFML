@@ -77,18 +77,20 @@ int main()
     Time lastPressed;
 
     // Create a couple of pickups
-    Pickup healthPickup(1);
-    Pickup ammoPickup(2);
+    Pickup coinPickup1(1);
+    //Pickup coinPickup2(1);
+    //Pickup coinPickup3(1);
+    Pickup bombPickup(2);
 
     // About the game
     int score = 0;
     //int hiScore = 0;
 
     // For the home/game over screen
-    Sprite spriteGameOver;
-    Texture textureGameOver = TextureHolder::GetTexture("graphics/background.jpg");
-    spriteGameOver.setTexture(textureGameOver);
-    spriteGameOver.setPosition(0, 0);
+    Sprite spriteStartGame;
+    Texture textureStartGame = TextureHolder::GetTexture("graphics/background.jpg");
+    spriteStartGame.setTexture(textureStartGame);
+    spriteStartGame.setPosition(0, 0);
     // Create a view for the HUD
     View hudView(sf::FloatRect(0, 0, 1920, 1080));
     // Create a sprite for the ammo icon
@@ -131,13 +133,19 @@ int main()
         "\n5- More and better health pickups" <<
         "\n6- More and better ammo pickups";
     levelUpText.setString(levelUpStream.str());
+     */
+
+
     // Ammo
+    
+    int SnakeHealth = 3;
+
     Text ammoText;
     ammoText.setFont(font);
     ammoText.setCharacterSize(55);
     ammoText.setFillColor(Color::White);
     ammoText.setPosition(200, 980);
-    */
+   
 
     // Score
     Text scoreText;
@@ -157,20 +165,7 @@ int main()
 
     // Hi Score
     Text hiScoreText;
-    //hiScoreText.setFont(font);
-    //hiScoreText.setCharacterSize(55);
-    //hiScoreText.setFillColor(Color::White);
-    //hiScoreText.setPosition(1400, 0);
-    //std::stringstream s;
-    //s << "Hi Score:" << hiScore;
-    //hiScoreText.setString(s.str());
-    // Zombies remaining
-    Text zombiesRemainingText;
-    zombiesRemainingText.setFont(font);
-    zombiesRemainingText.setCharacterSize(55);
-    zombiesRemainingText.setFillColor(Color::White);
-    zombiesRemainingText.setPosition(1500, 980);
-    zombiesRemainingText.setString("Zombies: 100");
+
     // Wave number
     int wave = 0;
     Text waveNumberText;
@@ -217,6 +212,9 @@ int main()
     hitBuffer.loadFromFile("sound/hit.wav");
     Sound hit;
     hit.setBuffer(hitBuffer);
+
+    
+
 
     // The main game loop
     while (window.isOpen())
@@ -305,25 +303,21 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::W))
             {
                 player.moveUp();
-                //hit.play();
             }
 
             if (Keyboard::isKeyPressed(Keyboard::S))
             {
                 player.moveDown();
-                //hit.play();
             }
 
             if (Keyboard::isKeyPressed(Keyboard::A))
             {
                 player.moveLeft();
-                //hit.play();
             }
 
             if (Keyboard::isKeyPressed(Keyboard::D))
             {
                 player.moveRight();
-                //hit.play();
             }
 
             /*
@@ -385,7 +379,7 @@ int main()
                 player.spawn(arena, resolution);//, tileSize);
 
                 // Create a horde of zombies
-                numZombies = 5 * wave;
+                numZombies = 1;
 
                 // Delete the previously allocated memory (if it exists)
                 delete[] zombies;
@@ -396,8 +390,12 @@ int main()
                 powerup.play();
 
                 // Configure the pick-ups
-                healthPickup.setArena(arena);
-                ammoPickup.setArena(arena);
+                
+                coinPickup1.setArena(arena);
+                //coinPickup2.setArena(arena);
+                //coinPickup3.setArena(arena);
+                bombPickup.setArena(arena);
+
 
                 // Reset the clock so there isn't a frame jump
                 clock.restart();
@@ -419,44 +417,17 @@ int main()
 
             // Make a decimal fraction of 1 from the delta time
             float dtAsSeconds = dt.asSeconds();
-            // Where is the mouse pointer
-            //mouseScreenPosition = Mouse::getPosition();
-            // Convert mouse position to world coordinates of mainView
-            //mouseWorldPosition = window.mapPixelToCoords(
-                //Mouse::getPosition(), mainView);
-
-            // Set the crosshair to the mouse world location
-            //spriteCrosshair.setPosition(mouseWorldPosition);
 
             // Update the player
             player.update(dtAsSeconds);// Mouse::getPosition());
             // Make a note of the players new position
             Vector2f playerPosition(player.getCenter());
-
-            // Make the view centre around the player                
-            //mainView.setCenter(player.getCenter());
-
-            // Loop through each Zombie and update them
-            for (int i = 0; i < numZombies; i++)
-            {
-                if (zombies[i].isAlive())
-                {
-                    zombies[i].update(dt.asSeconds(), playerPosition);
-                }
-            }
-
-            // Update any bullets that are in-flight
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    if (bullets[i].isInFlight())
-            //    {
-            //        bullets[i].update(dtAsSeconds);
-            //    }
             
 
             // Update the pickups
-            healthPickup.update(dtAsSeconds);
-            ammoPickup.update(dtAsSeconds);
+            //coinPickup1.spawn();
+            //bombPickup.spawn();
+
 
             // Collision detection
             // Have any zombies been shot?
@@ -479,11 +450,11 @@ int main()
                                 //{
                                 //    hiScore = score;
                                 //}
-                                numZombiesAlive--;
+                                //numZombiesAlive--;
                                 // When all the zombies are dead (again)
-                                if (numZombiesAlive == 0) {
-                                    state = State::LEVELING_UP;
-                                }
+                                //if (numZombiesAlive == 0) {
+                                //    state = State::LEVELING_UP;
+                                //}
                             }
 
                             // Make a splat sound
@@ -501,6 +472,7 @@ int main()
                         if (player.hit(gameTimeTotal))
                         {
                             // More here later
+                            SnakeHealth -= 1;
                             bomb.play();
                         }
                         if (player.getHealth() <= 0)
@@ -516,17 +488,31 @@ int main()
                 }// End player touched
 
                 // Has the player touched health pickup
-                if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
+                if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
                 {
-                    player.increaseHealthLevel(healthPickup.gotIt());
+                    player.increaseHealthLevel(coinPickup1.gotIt());
                     // Play a sound
                     pickup.play();
 
                 }
-                // Has the player touched ammo pickup
-                if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned())
+                //if (player.getPosition().intersects(coinPickup2.getPosition()) && coinPickup2.isSpawned())
+                //{
+                //    player.increaseHealthLevel(coinPickup2.gotIt());
+                //    // Play a sound
+                //    pickup.play();
+
+                //}
+                //if (player.getPosition().intersects(coinPickup3.getPosition()) && coinPickup3.isSpawned())
+                //{
+                //    player.increaseHealthLevel(coinPickup3.gotIt());
+                //    // Play a sound
+                //    pickup.play();
+
+                //}
+                // Has the player touched a bomb
+                if (player.getPosition().intersects(bombPickup.getPosition()) && bombPickup.isSpawned())
                 {
-                    bulletsSpare += ammoPickup.gotIt();
+                    bulletsSpare += bombPickup.gotIt();
                     // Play a sound
                     pickup.play();
 
@@ -535,7 +521,7 @@ int main()
                 msSinceLastHUDUpdate += dt.asMilliseconds();
 
                 // size up the health bar
-                healthBar.setSize(Vector2f(player.getHealth() * 3, 50));
+                //healthBar.setSize(Vector2f(player.getHealth() * 3, 50));
                 // Increment the number of frames since the previous update
                 //framesSinceLastHUDUpdate++;
                 // re-calculate every fpsMeasurementFrameInterval frames
@@ -549,8 +535,8 @@ int main()
                     std::stringstream ssWave;
                     std::stringstream ssZombiesAlive;
                     // Update the ammo text
-                    ssAmmo << bulletsInClip << "/" << bulletsSpare;
-                    //ammoText.setString(ssAmmo.str());
+                    ssAmmo << SnakeHealth; //<< "/" << bulletsSpare;
+                    ammoText.setString(ssAmmo.str());
                     // Update the score text
                     ssScore << "Score:" << score;
                     scoreText.setString(ssScore.str());
@@ -561,14 +547,15 @@ int main()
                     ssWave << "Wave:" << wave;
                     waveNumberText.setString(ssWave.str());
                     // Update the high score text
-                    ssZombiesAlive << "Zombies:" << numZombiesAlive;
-                    zombiesRemainingText.setString(ssZombiesAlive.str());
+                    //ssZombiesAlive << "Zombies:" << numZombiesAlive;
+                    //zombiesRemainingText.setString(ssZombiesAlive.str());
                     //framesSinceLastHUDUpdate = 0;
                     msSinceLastHUDUpdate = 0;
                 }// End HUD update
 
 
-            }
+            }//End Collision Detection
+
         }// End updating the scene
 
         /*
@@ -602,15 +589,16 @@ int main()
             }
 
             // Draw the pick-ups, if currently spawned
-            if (ammoPickup.isSpawned())
+            if (bombPickup.isSpawned())
             {
-                window.draw(ammoPickup.getSprite());
+                window.draw(bombPickup.getSprite());
             }
 
-            if (healthPickup.isSpawned())
+            if (coinPickup1.isSpawned())
             {
-                window.draw(healthPickup.getSprite());
+                window.draw(coinPickup1.getSprite());
             }
+
 
             // Draw the player
             window.draw(player.getSprite());
@@ -623,7 +611,7 @@ int main()
 
             // Draw all the HUD elements
             //window.draw(spriteAmmoIcon);
-            //window.draw(ammoText);
+            window.draw(ammoText);
             window.draw(scoreText);
             window.draw(hiScoreText);
             window.draw(healthBar);
@@ -634,7 +622,7 @@ int main()
         if (state == State::LEVELING_UP)
         {
             window.setView(hudView);
-            window.draw(spriteGameOver);
+            window.draw(spriteStartGame);
             //window.draw(levelUpText);
         }
         if (state == State::PAUSED)
@@ -645,7 +633,7 @@ int main()
         if (state == State::GAME_OVER)
         {
             window.setView(hudView);
-            window.draw(spriteGameOver);
+            window.draw(spriteStartGame);
             window.draw(gameOverText);
             window.draw(scoreText);
             window.draw(hiScoreText);
@@ -653,8 +641,6 @@ int main()
         window.display();
 
     }
-    // Delete the previously allocated memory (if it exists)
-    delete[] zombies;
 
     return 0;
 }
