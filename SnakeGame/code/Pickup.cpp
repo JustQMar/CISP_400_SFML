@@ -1,5 +1,6 @@
 #include "Pickup.h"
 #include "TextureHolder.h"
+
 Pickup::Pickup(int type)
 {
     // Store the type of this pickup

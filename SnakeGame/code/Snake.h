@@ -92,13 +92,6 @@ public:
 
 	// Stop the player moving in a specific direction
 
-	/*
-	void stopLeft();
-	void stopRight();
-	void stopUp();
-	void stopDown();
-	*/
-
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition);
 
@@ -110,14 +103,4 @@ public:
 
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
-
-	/*Snake(float startX, float startY);
-	FloatRect getPosition();
-	RectangleShape getShape();
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
-	void update(Time dt);
-	*/
 };

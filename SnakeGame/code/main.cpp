@@ -2,6 +2,7 @@
 #include "Snake.h"
 #include "Pickup.h"
 #include "Coin.h"
+#include "Bomb.h"
 #include <SFML/Audio.hpp>
 
 using namespace sf;
@@ -43,10 +44,10 @@ int main()
 	spriteBackground.setPosition(0, 0);
 
 	// Create a couple of pickups
-	//Pickup coinPickup(1);
+	//Pickup healthPickup(1);
 	//Pickup bombPickup(2);
 
-	//Pickup coinPickup();
+	Bomb hello;
 
 	// Prepare the coin
 	Texture textureCoin;
@@ -161,6 +162,7 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
+				//hello.spawn(); 
 				//hit.play();
 			}
 
