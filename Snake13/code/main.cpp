@@ -5,7 +5,7 @@
 #include "Snake.h"
 #include "ZombieArena.h"
 #include "TextureHolder.h"
-#include "Bullet.h"
+//#include "Bullet.h"
 #include "Pickup.h"
 using namespace sf;
 
@@ -59,9 +59,9 @@ int main()
     Zombie* zombies = nullptr;
 
     // 100 bullets should do
-    Bullet bullets[100];
-    int currentBullet = 0;
-    int bulletsSpare = 24;
+    //Bullet bullets[100];
+    //int currentBullet = 0;
+    //int bulletsSpare = 24;
     // When was the fire button last pressed?
     Time lastPressed;
 
@@ -93,10 +93,10 @@ int main()
     // Start
     Text gameStartText;
     gameStartText.setFont(font);
-    gameStartText.setCharacterSize(80);
+    gameStartText.setCharacterSize(70);
     gameStartText.setFillColor(Color::White);
     gameStartText.setPosition(resolution.x / 16 , resolution.y / 2);
-    gameStartText.setString("GAME INSTRUCTION : \n1.Collect coins to increase your size. \n2.Avoid bombs and survive until time runs out. \nClick ENTER to start.");
+    gameStartText.setString("GAME INSTRUCTION : \n1. Collect coins to increase your score. \n2. Avoid bombs and the edge of the screen. \nClick ENTER to start.");
     // Game Over
     Text gameOverText;
     gameOverText.setFont(font);
@@ -105,18 +105,16 @@ int main()
     gameOverText.setPosition(resolution.x / 4, resolution.y / 2);
     gameOverText.setString("GAME OVER: \nPress Enter to Restart");
 
-
+    //Heath
     int SnakeHealth = 3;
-    int score = 0;
-
-    Text ammoText;
-    ammoText.setFont(font);
-    ammoText.setCharacterSize(55);
-    ammoText.setFillColor(Color::White);
-    ammoText.setPosition(20, 980);
-   
+    Text healthText;
+    healthText.setFont(font);
+    healthText.setCharacterSize(55);
+    healthText.setFillColor(Color::White);
+    healthText.setPosition(20, 980);
 
     // Score
+    int score = 0;
     Text scoreText;
     scoreText.setFont(font);
     scoreText.setCharacterSize(55);
@@ -127,14 +125,7 @@ int main()
     // Hi Score
     Text hiScoreText;
 
-    // Wave number
-    int wave = 0;
-    Text waveNumberText;
-    waveNumberText.setFont(font);
-    waveNumberText.setCharacterSize(55);
-    waveNumberText.setFillColor(Color::White);
-    waveNumberText.setPosition(1250, 980);
-    waveNumberText.setString("Wave: 0");
+
     // Health bar
     RectangleShape healthBar;
     healthBar.setFillColor(Color::Red);
@@ -174,10 +165,6 @@ int main()
     textureBoom.loadFromFile("graphics/tree.png");
     Sprite spriteBoom;
     spriteBoom.setTexture(textureBoom);
-
-    //spriteBoom.setPosition(810, 0);
-
-
 
     // The main game loop
     while (window.isOpen())
@@ -276,7 +263,7 @@ int main()
             if (state == State::PLAYING)
             {
                 // Increase the wave number
-                wave++;
+                //wave++;
 
                 // Prepare the level
                 // We will modify the next two lines later
@@ -286,7 +273,7 @@ int main()
                 arena.top = 50;
 
                 // Spawn the player in the middle of the arena
-                player.spawn(arena, resolution);//, tileSize);
+                player.spawn(arena, resolution);
 
                 // Create a horde of zombies
                 numZombies = 1;
@@ -331,19 +318,12 @@ int main()
             // Make a note of the players new position
             Vector2f playerPosition(player.getCenter());
             
-
-            // Update the pickups
-            //coinPickup1.spawn();
-            //bombPickup.spawn();
-
             coinPickup1.update(dtAsSeconds);
             bombPickup.update(dtAsSeconds);
 
             // Collision detection
             for (int i = 0; i < 100; i++)
             {
-
-                
 
                 // Has the player touched a coin
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
@@ -357,7 +337,7 @@ int main()
                 // Has the player touched a bomb
                 if (player.getPosition().intersects(bombPickup.getPosition()) && bombPickup.isSpawned())
                 {
-                    bulletsSpare += bombPickup.gotIt();
+                    //bulletsSpare += bombPickup.gotIt();
                     SnakeHealth -= 1;
 
                     bomb.play();
@@ -379,23 +359,17 @@ int main()
                 if (msSinceLastHUDUpdate > msHUDFrameInterval)
                 {
                     // Update game HUD text
-                    std::stringstream ssAmmo;
+                    std::stringstream ssLife;
                     std::stringstream ssScore;
-                    std::stringstream ssHiScore;
-                    std::stringstream ssWave;
-                    std::stringstream ssZombiesAlive;
-                    // Update the ammo text
-                    ssAmmo << "Life:" << SnakeHealth; 
-                    ammoText.setString(ssAmmo.str());
+
+                    // Update the life text
+                    ssLife << "Life:" << SnakeHealth; 
+                    healthText.setString(ssLife.str());
+
                     // Update the score text
-                    ssScore << "Score:" << score;
+                    ssScore << "Score:" << Score;
                     scoreText.setString(ssScore.str());
-                    // Update the high score text
-                    //ssHiScore << "Hi Score:" << hiScore;
-                    hiScoreText.setString(ssHiScore.str());
-                    // Update the wave
-                    ssWave << "Wave:" << wave;
-                    waveNumberText.setString(ssWave.str());
+
 
                     msSinceLastHUDUpdate = 0;
                 }// End HUD update
@@ -441,10 +415,9 @@ int main()
             window.setView(hudView);
 
             // Draw all the HUD elements
-            window.draw(ammoText);
+            //window.draw(healthText);
             window.draw(scoreText);
-            window.draw(hiScoreText);
-            window.draw(healthBar);
+            //window.draw(healthBar);
 
         }
         if (state == State::LEVELING_UP)
@@ -463,7 +436,6 @@ int main()
             window.draw(spriteStartGame);
             window.draw(gameStartText);
             window.draw(scoreText);
-            window.draw(hiScoreText);
         }
         if (state == State::GAME_OVER)
         {
