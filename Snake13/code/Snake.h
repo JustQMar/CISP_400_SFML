@@ -5,7 +5,7 @@ class Snake
 {
 private:
 
-    const float START_SPEED = 500;
+    const float START_SPEED = 1000;
     const float START_HEALTH = 3;
 
     // Where is the player

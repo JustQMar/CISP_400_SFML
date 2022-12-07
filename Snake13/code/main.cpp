@@ -96,7 +96,7 @@ int main()
     gameStartText.setCharacterSize(70);
     gameStartText.setFillColor(Color::White);
     gameStartText.setPosition(resolution.x / 16 , resolution.y / 2);
-    gameStartText.setString("GAME INSTRUCTION : \n1. Collect coins to increase your score. \n2. Avoid bombs and the edge of the screen. \nClick ENTER to start.");
+    gameStartText.setString("GAME INSTRUCTION : \n1. Collect coins to increase your score. \n2. Avoid bombs to avoid dying. \nPress ENTER to begin.");
     // Game Over
     Text gameOverText;
     gameOverText.setFont(font);
@@ -136,7 +136,7 @@ int main()
 
     // Prepare the powerup sound
     SoundBuffer powerupBuffer;
-    powerupBuffer.loadFromFile("sound/powerup.wav");
+    powerupBuffer.loadFromFile("sound/snake.wav");
     Sound powerup;
     powerup.setBuffer(powerupBuffer);
     // Prepare the pickup sound
