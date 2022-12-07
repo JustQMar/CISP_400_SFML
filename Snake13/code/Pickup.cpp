@@ -46,9 +46,12 @@ void Pickup::setArena(IntRect arena)
 void Pickup::spawn()
 {
     // Spawn at a random location
-    srand((int)time(0) / m_Type);
+    srand((int)time(NULL) / m_Type);
+
     int x = (rand() % m_Arena.width);
-    srand((int)time(0) * m_Type);
+
+    srand((int)time(NULL) * m_Type);
+
     int y = (rand() % m_Arena.height);
 
     // Not currently spawned

@@ -17,11 +17,12 @@ int main()
     // The game will always be in one of four states
     enum class State {
         PAUSED, LEVELING_UP,
-        GAME_OVER, PLAYING
+        GAME_OVER, 
+        PLAYING, STARTING
     };
 
     // Start with the GAME_OVER state
-    State state = State::GAME_OVER;
+    State state = State::STARTING;
     // Get the screen resolution and 
     // create an SFML window
     Vector2f resolution;
@@ -89,6 +90,12 @@ int main()
     Texture textureStartGame = TextureHolder::GetTexture("graphics/background.jpg");
     spriteStartGame.setTexture(textureStartGame);
     spriteStartGame.setPosition(0, 0);
+
+
+
+
+
+
     // Create a view for the HUD
     View hudView(sf::FloatRect(0, 0, 1920, 1080));
     // Create a sprite for the ammo icon
@@ -221,22 +228,39 @@ int main()
                     // clock reset
                     clock.restart();
                 }
-                // Start a new game while in GAME_OVER state
+
+
+
+
+                // Start a new game while in Start state
+                else if (event.key.code == Keyboard::Return &&
+                    state == State::STARTING)
+                {
+                    wave = 0;
+                    score = 0;
+                    // Prepare the gun and ammo for next game
+                    SnakeHealth = 3;
+                    // Reset the player's stats
+                    //player.resetPlayerStats();
+                    state = State::LEVELING_UP;
+                }
+
+
+                // Start a new game while in Start state
                 else if (event.key.code == Keyboard::Return &&
                     state == State::GAME_OVER)
                 {
                     wave = 0;
                     score = 0;
                     // Prepare the gun and ammo for next game
-                    currentBullet = 0;
-                    bulletsSpare = 24;
-                    bulletsInClip = 6;
-                    clipSize = 6;
-                    fireRate = 1;
+                    SnakeHealth = 3;
                     // Reset the player's stats
                     //player.resetPlayerStats();
                     state = State::LEVELING_UP;
                 }
+
+
+
                 if (state == State::PLAYING)
                 {
                     // Reloading
@@ -468,7 +492,6 @@ int main()
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
                 {
                     player.increaseHealthLevel(coinPickup1.gotIt());
-                    // Play a sound
                     pickup.play();
 
                 }
@@ -477,8 +500,13 @@ int main()
                 if (player.getPosition().intersects(bombPickup.getPosition()) && bombPickup.isSpawned())
                 {
                     bulletsSpare += bombPickup.gotIt();
-                    // Play a sound
-                    pickup.play();
+                    SnakeHealth -= 1;
+                    bomb.play();
+
+                    if (SnakeHealth <= 0)
+                    {
+                        state = State::GAME_OVER;
+                    }
 
                 }
 
@@ -594,13 +622,21 @@ int main()
             window.setView(hudView);
             window.draw(pausedText);
         }
-        if (state == State::GAME_OVER)
+        if (state == State::STARTING)
         {
             window.setView(hudView);
             window.draw(spriteStartGame);
             window.draw(gameOverText);
             window.draw(scoreText);
             window.draw(hiScoreText);
+        }
+        if (state == State::GAME_OVER)
+        {
+            //window.setView(hudView);
+            //window.draw(spriteStartGame);
+            //window.draw(gameOverText);
+            window.draw(scoreText);
+            //window.draw(hiScoreText);
         }
         window.display();
 
