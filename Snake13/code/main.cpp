@@ -78,8 +78,6 @@ int main()
 
     // Create a couple of pickups
     Pickup coinPickup1(1);
-    //Pickup coinPickup2(1);
-    //Pickup coinPickup3(1);
     Pickup bombPickup(2);
 
     // About the game
@@ -116,27 +114,6 @@ int main()
     gameOverText.setFillColor(Color::White);
     gameOverText.setPosition(resolution.x / 16 , resolution.y / 2);
     gameOverText.setString("GAME INSTRUCTION : \n1.Collect coins to increase your size. \n2.Avoid bombs and survive until time runs out. \nClick ENTER to start.");
-    
-    /*
-    // LEVELING up
-    Text levelUpText;
-    levelUpText.setFont(font);
-    levelUpText.setCharacterSize(80);
-    levelUpText.setFillColor(Color::White);
-    levelUpText.setPosition(150, 250);
-    std::stringstream levelUpStream;
-    levelUpStream <<
-        "1- Increased rate of fire" <<
-        "\n2- Increased clip size(next reload)" <<
-        "\n3- Increased max health" <<
-        "\n4- Increased run speed" <<
-        "\n5- More and better health pickups" <<
-        "\n6- More and better ammo pickups";
-    levelUpText.setString(levelUpStream.str());
-     */
-
-
-    // Ammo
     
     int SnakeHealth = 3;
 
@@ -392,8 +369,6 @@ int main()
                 // Configure the pick-ups
                 
                 coinPickup1.setArena(arena);
-                //coinPickup2.setArena(arena);
-                //coinPickup3.setArena(arena);
                 bombPickup.setArena(arena);
 
 
@@ -428,6 +403,8 @@ int main()
             //coinPickup1.spawn();
             //bombPickup.spawn();
 
+            coinPickup1.update(dtAsSeconds);
+            bombPickup.update(dtAsSeconds);
 
             // Collision detection
             // Have any zombies been shot?
@@ -487,7 +464,7 @@ int main()
                     }
                 }// End player touched
 
-                // Has the player touched health pickup
+                // Has the player touched a coin
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
                 {
                     player.increaseHealthLevel(coinPickup1.gotIt());
@@ -495,20 +472,7 @@ int main()
                     pickup.play();
 
                 }
-                //if (player.getPosition().intersects(coinPickup2.getPosition()) && coinPickup2.isSpawned())
-                //{
-                //    player.increaseHealthLevel(coinPickup2.gotIt());
-                //    // Play a sound
-                //    pickup.play();
 
-                //}
-                //if (player.getPosition().intersects(coinPickup3.getPosition()) && coinPickup3.isSpawned())
-                //{
-                //    player.increaseHealthLevel(coinPickup3.gotIt());
-                //    // Play a sound
-                //    pickup.play();
-
-                //}
                 // Has the player touched a bomb
                 if (player.getPosition().intersects(bombPickup.getPosition()) && bombPickup.isSpawned())
                 {
