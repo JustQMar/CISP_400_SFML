@@ -38,15 +38,8 @@ int main()
     Clock clock;
     // How long has the PLAYING state been active
     Time gameTimeTotal;
-    // Where is the mouse in 
-    // relation to world coordinates
-    
-    
-    //Vector2f mouseWorldPosition;
-    
-    
-    // Where is the mouse in 
-    // relation to screen coordinates
+
+    // Where is the mouse in relation to screen coordinates
     Vector2i mouseScreenPosition;
     // Create an instance of the Player class
     Snake player;
@@ -91,22 +84,17 @@ int main()
     spriteStartGame.setTexture(textureStartGame);
     spriteStartGame.setPosition(0, 0);
 
-
-
-
-
-
     // Create a view for the HUD
     View hudView(sf::FloatRect(0, 0, 1920, 1080));
     // Create a sprite for the ammo icon
     //Sprite spriteAmmoIcon;
     //Texture textureAmmoIcon = TextureHolder::GetTexture(
-    //    "graphics/ammo_icon.png");
+    //"graphics/ammo_icon.png");
     //spriteAmmoIcon.setTexture(textureAmmoIcon);
     //spriteAmmoIcon.setPosition(20, 980);
     // Load the font
     Font font;
-    font.loadFromFile("fonts/zombiecontrol.ttf");
+    font.loadFromFile("fonts/KOMIKAP_.ttf");
     // Paused
     Text pausedText;
     pausedText.setFont(font);
@@ -114,14 +102,22 @@ int main()
     pausedText.setFillColor(Color::White);
     pausedText.setPosition(400, 400);
     pausedText.setString("Paused");
+    // Start
+    Text gameStartText;
+    gameStartText.setFont(font);
+    gameStartText.setCharacterSize(80);
+    gameStartText.setFillColor(Color::White);
+    gameStartText.setPosition(resolution.x / 16 , resolution.y / 2);
+    gameStartText.setString("GAME INSTRUCTION : \n1.Collect coins to increase your size. \n2.Avoid bombs and survive until time runs out. \nClick ENTER to start.");
     // Game Over
     Text gameOverText;
     gameOverText.setFont(font);
     gameOverText.setCharacterSize(80);
     gameOverText.setFillColor(Color::White);
-    gameOverText.setPosition(resolution.x / 16 , resolution.y / 2);
-    gameOverText.setString("GAME INSTRUCTION : \n1.Collect coins to increase your size. \n2.Avoid bombs and survive until time runs out. \nClick ENTER to start.");
-    
+    gameOverText.setPosition(resolution.x / 4, resolution.y / 2);
+    gameOverText.setString("GAME OVER: \nPress Enter to Restart");
+
+
     int SnakeHealth = 3;
 
     Text ammoText;
@@ -229,65 +225,29 @@ int main()
                     clock.restart();
                 }
 
-
-
-
                 // Start a new game while in Start state
                 else if (event.key.code == Keyboard::Return &&
                     state == State::STARTING)
                 {
-                    wave = 0;
-                    score = 0;
-                    // Prepare the gun and ammo for next game
+
+                    // Prepare health
                     SnakeHealth = 3;
                     // Reset the player's stats
                     //player.resetPlayerStats();
                     state = State::LEVELING_UP;
                 }
-
 
                 // Start a new game while in Start state
                 else if (event.key.code == Keyboard::Return &&
                     state == State::GAME_OVER)
                 {
-                    wave = 0;
-                    score = 0;
-                    // Prepare the gun and ammo for next game
+                    // Prepare health
                     SnakeHealth = 3;
                     // Reset the player's stats
                     //player.resetPlayerStats();
                     state = State::LEVELING_UP;
                 }
 
-
-
-                if (state == State::PLAYING)
-                {
-                    // Reloading
-                    if (event.key.code == Keyboard::R)
-                    {
-                        if (bulletsSpare >= clipSize)
-                        {
-                            // Plenty of bullets. Reload.
-                            bulletsInClip = clipSize;
-                            bulletsSpare -= clipSize;
-                            //reload.play();
-                        }
-                        else if (bulletsSpare > 0)
-                        {
-                            // Only few bullets left
-                            bulletsInClip = bulletsSpare;
-                            bulletsSpare = 0;
-                            //reload.play();
-                        }
-                        else
-                        {
-                            // More here soon?!
-                            //reloadFailed.play();
-                        }
-                    }
-
-                }
             }
         }// End event polling
         // Handle the player quitting
@@ -320,35 +280,6 @@ int main()
             {
                 player.moveRight();
             }
-
-            /*
-            
-            // Fire a bullet
-            if (Mouse::isButtonPressed(sf::Mouse::Left))
-            {
-                if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate && bulletsInClip > 0)
-                {
-                    // Pass the centre of the player
-                    // and the centre of the cross-hair
-                    // to the shoot function
-                    bullets[currentBullet].shoot(
-                        player.getCenter().x, player.getCenter().y,
-                        mouseWorldPosition.x, mouseWorldPosition.y);
-                    currentBullet++;
-                    if (currentBullet > 99)
-                    {
-                        currentBullet = 0;
-                    }
-                    lastPressed = gameTimeTotal;
-                    shoot.play();
-                    bulletsInClip--;
-                }
-            }// End fire a bullet
-            
-            
-            */
-
-            
 
         }// End WASD while playing
         // Handle the LEVELING up state
@@ -431,62 +362,10 @@ int main()
             bombPickup.update(dtAsSeconds);
 
             // Collision detection
-            // Have any zombies been shot?
             for (int i = 0; i < 100; i++)
             {
-                for (int j = 0; j < numZombies; j++)
-                {
-                    if (bullets[i].isInFlight() && zombies[j].isAlive())
-                    {
-                        if (bullets[i].getPosition().intersects(zombies[j].getPosition()))
-                        {
-                            // Stop the bullet
-                            bullets[i].stop();
-                            // Register the hit and see if it was a kill
-                            if (zombies[j].hit())
-                            {
-                                // Not just a hit but a kill too
-                                score += 10;
-                                //if (score >= hiScore)
-                                //{
-                                //    hiScore = score;
-                                //}
-                                //numZombiesAlive--;
-                                // When all the zombies are dead (again)
-                                //if (numZombiesAlive == 0) {
-                                //    state = State::LEVELING_UP;
-                                //}
-                            }
 
-                            // Make a splat sound
-                            //splat.play();
-
-                        }
-                    }
-                }// End zombie being shot
-
-                // Have any zombies touched the player            
-                for (int i = 0; i < numZombies; i++)
-                {
-                    if (player.getPosition().intersects(zombies[i].getPosition()) && zombies[i].isAlive())
-                    {
-                        if (player.hit(gameTimeTotal))
-                        {
-                            // More here later
-                            SnakeHealth -= 1;
-                            bomb.play();
-                        }
-                        if (player.getHealth() <= 0)
-                        {
-                            //std::ofstream outputFile("gamedata/scores.txt");
-                            // << writes the data
-                            //outputFile << hiScore;
-                            //outputFile.close();
-                            
-                            state = State::GAME_OVER;
-                        }
-                    }
-                }// End player touched
+                
 
                 // Has the player touched a coin
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
@@ -512,12 +391,6 @@ int main()
 
                 msSinceLastHUDUpdate += dt.asMilliseconds();
 
-                // size up the health bar
-                //healthBar.setSize(Vector2f(player.getHealth() * 3, 50));
-                // Increment the number of frames since the previous update
-                //framesSinceLastHUDUpdate++;
-                // re-calculate every fpsMeasurementFrameInterval frames
-                //if (framesSinceLastHUDUpdate > fpsMeasurementFrameInterval)
                 if (msSinceLastHUDUpdate > msHUDFrameInterval)
                 {
                     // Update game HUD text
@@ -538,10 +411,7 @@ int main()
                     // Update the wave
                     ssWave << "Wave:" << wave;
                     waveNumberText.setString(ssWave.str());
-                    // Update the high score text
-                    //ssZombiesAlive << "Zombies:" << numZombiesAlive;
-                    //zombiesRemainingText.setString(ssZombiesAlive.str());
-                    //framesSinceLastHUDUpdate = 0;
+
                     msSinceLastHUDUpdate = 0;
                 }// End HUD update
 
@@ -626,7 +496,7 @@ int main()
         {
             window.setView(hudView);
             window.draw(spriteStartGame);
-            window.draw(gameOverText);
+            window.draw(gameStartText);
             window.draw(scoreText);
             window.draw(hiScoreText);
         }
@@ -634,7 +504,7 @@ int main()
         {
             //window.setView(hudView);
             //window.draw(spriteStartGame);
-            //window.draw(gameOverText);
+            window.draw(gameOverText);
             window.draw(scoreText);
             //window.draw(hiScoreText);
         }
