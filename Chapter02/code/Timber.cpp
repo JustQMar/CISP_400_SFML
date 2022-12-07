@@ -18,7 +18,7 @@ int main()
 	Texture textureBackground;
 
 	// Load a graphic into the texture
-	textureBackground.loadFromFile("graphics/grass.jpg");
+	textureBackground.loadFromFile("graphics/background.png");
 
 	// Create a sprite
 	Sprite spriteBackground;
@@ -28,6 +28,7 @@ int main()
 
 	// Set the spriteBackground to cover the screen
 	spriteBackground.setPosition(0, 0);
+
 
 
 	while (window.isOpen())
@@ -74,5 +75,4 @@ int main()
 
 	return 0;
 }
-
 

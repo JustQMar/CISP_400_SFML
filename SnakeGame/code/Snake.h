@@ -4,7 +4,7 @@ using namespace sf;
 class Snake
 {
 private:
-	
+
 	const float START_SPEED = 200;
 	const float START_HEALTH = 100;
 
@@ -50,7 +50,7 @@ private:
 	float m_Speed = 1000.0f;
 	bool m_MovingRight = false;
 	bool m_MovingLeft = false;
-    bool m_MovingUp = false;
+	bool m_MovingUp = false;
 	bool m_MovingDown = false;
 	*/
 
@@ -98,7 +98,7 @@ public:
 	void stopUp();
 	void stopDown();
 	*/
-	
+
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition);
 
@@ -116,8 +116,8 @@ public:
 	RectangleShape getShape();
 	void moveLeft();
 	void moveRight();
-    void moveUp();
-    void moveDown();
+	void moveUp();
+	void moveDown();
 	void update(Time dt);
 	*/
 };

@@ -18,7 +18,7 @@ int main()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
-	RenderWindow window(VideoMode(resolution.x, resolution.y),"Snake Game", Style::Fullscreen);
+	RenderWindow window(VideoMode(resolution.x, resolution.y), "Snake Game", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -43,10 +43,10 @@ int main()
 	spriteBackground.setPosition(0, 0);
 
 	// Create a couple of pickups
-	//Pickup healthPickup(1);
-	//Pickup ammoPickup(2);
+	//Pickup coinPickup(1);
+	//Pickup bombPickup(2);
 
-	Pickup coinPickup();
+	//Pickup coinPickup();
 
 	// Prepare the coin
 	Texture textureCoin;
@@ -193,8 +193,8 @@ int main()
 				// Configure the pick-ups
 				//coinPickup.setArena();
 				//coinPickup.spawn();
-				
-				
+
+
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
 
@@ -231,7 +231,6 @@ int main()
 				ball.reboundBatOrTop();
 				splat.play();
 				m_Spawned = false;
-
 			}
 			*/
 

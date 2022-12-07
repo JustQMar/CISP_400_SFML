@@ -90,7 +90,7 @@ void Snake::moveLeft()
 	m_RightPressed = false;
 	m_UpPressed = false;
 	m_DownPressed = false;
-	
+
 }
 
 void Snake::moveRight()
@@ -125,22 +125,18 @@ void Snake::stopLeft()
 {
 	m_LeftPressed = false;
 }
-
 void Snake::stopRight()
 {
 	m_RightPressed = false;
 }
-
 void Snake::stopUp()
 {
 	m_UpPressed = false;
 }
-
 void Snake::stopDown()
 {
 	m_DownPressed = false;
 }
-
 */
 void Snake::update(float elapsedTime, Vector2i mousePosition)
 {
@@ -206,7 +202,8 @@ void Snake::update(float elapsedTime, Vector2i mousePosition)
 
 void Snake::upgradeSpeed()
 {//20% speed upgrade 
-	m_Speed += (START_SPEED * .2);}
+	m_Speed += (START_SPEED * .2);
+}
 
 void Snake::upgradeHealth()
 {
@@ -216,7 +213,8 @@ void Snake::upgradeHealth()
 }
 
 void Snake::increaseHealthLevel(int amount)
-{m_Health += amount;
+{
+	m_Health += amount;
 
 	// But not beyond the maximum
 	if (m_Health > m_MaxHealth)
@@ -227,51 +225,44 @@ void Snake::increaseHealthLevel(int amount)
 
 /*Snake::Snake(float startX, float startY)
 {
-    m_Position.x = startX;
+	m_Position.x = startX;
 	m_Position.y = startY;
-
 	m_Shape.setSize(sf::Vector2f(50, 5));
 	m_Shape.setPosition(m_Position);
 }
-
 FloatRect Snake::getPosition()
 {
-    return m_Shape.getGlobalBounds();
+	return m_Shape.getGlobalBounds();
 }
 RectangleShape Snake::getShape()
 {
-    return m_Shape;
+	return m_Shape;
 }
-
 void Snake::moveLeft()
 {
-    m_MovingLeft = true;
+	m_MovingLeft = true;
 }
-
 void Snake::moveRight()
 {
-    m_MovingRight = true;
+	m_MovingRight = true;
 }
-
 void Snake::moveUp()
 {
-    m_MovingUp = true;
+	m_MovingUp = true;
 }
-
 void Snake::moveDown()
 {
-    m_MovingDown = true;
+	m_MovingDown = true;
 }
-
 void Snake::update(Time dt)
 {
-    if (m_MovingLeft) {
+	if (m_MovingLeft) {
 		m_Position.x -= m_Speed * dt.asSeconds();
 	}
 	if (m_MovingRight) {
 		m_Position.x += m_Speed * dt.asSeconds();
 	}
-    if (m_MovingDown) {
+	if (m_MovingDown) {
 		m_Position.y -= m_Speed * dt.asSeconds();
 	}
 	if (m_MovingUp) {
