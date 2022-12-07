@@ -1,4 +1,4 @@
-#include "ZombieArena.h"
+#include "Arena.h"
 #include "Zombie.h"
 Zombie* createHorde(int numZombies, IntRect arena)
 {

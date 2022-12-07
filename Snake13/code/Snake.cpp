@@ -29,9 +29,6 @@ void Snake::spawn(IntRect arena, Vector2f resolution)//, int tileSize)
 	m_Arena.top = arena.top;
 	m_Arena.height = arena.height;
 
-	// Remember how big the tiles are in this arena
-	//m_TileSize = tileSize;
-
 	// Strore the resolution for future use
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
@@ -155,6 +152,7 @@ void Snake::update(float elapsedTime)//, Vector2i mousePosition)
 	if (m_Position.x > m_Arena.width)// - m_TileSize)
 	{
 		m_Position.x = m_Arena.width;// - m_TileSize;
+		//SnakeHealth--;
 	}
 
 	if (m_Position.x < m_Arena.left)// + m_TileSize)

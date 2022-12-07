@@ -3,9 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Snake.h"
-#include "ZombieArena.h"
+#include "Arena.h"
 #include "TextureHolder.h"
-//#include "Bullet.h"
 #include "Pickup.h"
 using namespace sf;
 
@@ -58,10 +57,6 @@ int main()
     int numZombiesAlive;
     Zombie* zombies = nullptr;
 
-    // 100 bullets should do
-    //Bullet bullets[100];
-    //int currentBullet = 0;
-    //int bulletsSpare = 24;
     // When was the fire button last pressed?
     Time lastPressed;
 
@@ -151,7 +146,7 @@ int main()
     bomb.setBuffer(bombBuffer);
     // Prepare the pickup sound
     SoundBuffer countBuffer;
-   countBuffer.loadFromFile("sound/countdown.wav");
+    countBuffer.loadFromFile("sound/countdown.wav");
     Sound count;
     count.setBuffer(countBuffer);
     // Prepare the hit sound
@@ -162,7 +157,7 @@ int main()
 
     
     Texture textureBoom;
-    textureBoom.loadFromFile("graphics/tree.png");
+    textureBoom.loadFromFile("graphics/boom_1.png");
     Sprite spriteBoom;
     spriteBoom.setTexture(textureBoom);
 
@@ -275,6 +270,8 @@ int main()
                 // Spawn the player in the middle of the arena
                 player.spawn(arena, resolution);
 
+
+
                 // Create a horde of zombies
                 numZombies = 1;
 
@@ -325,6 +322,17 @@ int main()
             for (int i = 0; i < 100; i++)
             {
 
+                /*
+                
+                // Handle Snake hitting the bottom
+                if (player.getPosition().x ) {
+
+                    // Remove a life
+                    SnakeHealth--;
+                }
+                
+                */
+
                 // Has the player touched a coin
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
                 {
@@ -343,7 +351,7 @@ int main()
                     bomb.play();
 
                     bombPickup.getPosition();
-                    spriteBoom.setPosition(810, 0);
+                    //spriteBoom.setPosition(810, 0);
 
 
                     if (SnakeHealth <= 0)
@@ -407,7 +415,6 @@ int main()
                 window.draw(coinPickup1.getSprite());
             }
 
-
             // Draw the player
             window.draw(player.getSprite());
 
@@ -417,7 +424,6 @@ int main()
             // Draw all the HUD elements
             //window.draw(healthText);
             window.draw(scoreText);
-            //window.draw(healthBar);
 
         }
         if (state == State::LEVELING_UP)
