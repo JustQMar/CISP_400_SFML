@@ -2,7 +2,7 @@
 #include <fstream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "Player.h"
+#include "Snake.h"
 #include "ZombieArena.h"
 #include "TextureHolder.h"
 #include "Bullet.h"
@@ -28,7 +28,7 @@ int main()
     resolution.x = VideoMode::getDesktopMode().width;
     resolution.y = VideoMode::getDesktopMode().height;
 
-    RenderWindow window(VideoMode(resolution.x, resolution.y), "Zombie Arena", Style::Fullscreen);
+    RenderWindow window(VideoMode(resolution.x, resolution.y), "Snake Game", Style::Fullscreen);
     
     // Create a an SFML View for the main action
     View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -39,7 +39,11 @@ int main()
     Time gameTimeTotal;
     // Where is the mouse in 
     // relation to world coordinates
-    Vector2f mouseWorldPosition;
+    
+    
+    //Vector2f mouseWorldPosition;
+    
+    
     // Where is the mouse in 
     // relation to screen coordinates
     Vector2i mouseScreenPosition;
@@ -72,29 +76,21 @@ int main()
     // When was the fire button last pressed?
     Time lastPressed;
 
-    // Hide the mouse pointer and replace it with crosshair
-    //window.setMouseCursorVisible(false);
-    //Sprite spriteCrosshair;
-    //Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
-    //spriteCrosshair.setTexture(textureCrosshair);
-    //spriteCrosshair.setOrigin(25, 25);
-
-
     // Create a couple of pickups
     Pickup healthPickup(1);
     Pickup ammoPickup(2);
 
     // About the game
     int score = 0;
-    int hiScore = 0;
+    //int hiScore = 0;
 
     // For the home/game over screen
     Sprite spriteGameOver;
-    Texture textureGameOver = TextureHolder::GetTexture("graphics/background.png");
+    Texture textureGameOver = TextureHolder::GetTexture("graphics/background.jpg");
     spriteGameOver.setTexture(textureGameOver);
     spriteGameOver.setPosition(0, 0);
     // Create a view for the HUD
-    View hudView(sf::FloatRect(0, 0, 1920, 1080));/////////////////
+    View hudView(sf::FloatRect(0, 0, 1920, 1080));
     // Create a sprite for the ammo icon
     //Sprite spriteAmmoIcon;
     //Texture textureAmmoIcon = TextureHolder::GetTexture(
@@ -155,19 +151,19 @@ int main()
     if (inputFile.is_open())
     {
         // >> Reads the data
-        inputFile >> hiScore;
-        inputFile.close();
+        //inputFile >> hiScore;
+        //inputFile.close();
     }
 
     // Hi Score
     Text hiScoreText;
-    hiScoreText.setFont(font);
-    hiScoreText.setCharacterSize(55);
-    hiScoreText.setFillColor(Color::White);
-    hiScoreText.setPosition(1400, 0);
-    std::stringstream s;
-    s << "Hi Score:" << hiScore;
-    hiScoreText.setString(s.str());
+    //hiScoreText.setFont(font);
+    //hiScoreText.setCharacterSize(55);
+    //hiScoreText.setFillColor(Color::White);
+    //hiScoreText.setPosition(1400, 0);
+    //std::stringstream s;
+    //s << "Hi Score:" << hiScore;
+    //hiScoreText.setString(s.str());
     // Zombies remaining
     Text zombiesRemainingText;
     zombiesRemainingText.setFont(font);
@@ -196,31 +192,6 @@ int main()
     float msSinceLastHUDUpdate = 0;
     float msHUDFrameInterval = 1000;
 
-    // Prepare the hit sound
-    SoundBuffer hitBuffer;
-    hitBuffer.loadFromFile("sound/hit.wav");
-    Sound hit;
-    hit.setBuffer(hitBuffer);
-    // Prepare the splat sound
-    SoundBuffer splatBuffer;
-    splatBuffer.loadFromFile("sound/splat.wav");
-    Sound splat;
-    splat.setBuffer(splatBuffer);
-    // Prepare the shoot sound
-    SoundBuffer shootBuffer;
-    shootBuffer.loadFromFile("sound/shoot.wav");
-    Sound shoot;
-    shoot.setBuffer(shootBuffer);
-    // Prepare the reload sound
-    SoundBuffer reloadBuffer;
-    reloadBuffer.loadFromFile("sound/reload.wav");
-    Sound reload;
-    reload.setBuffer(reloadBuffer);
-    // Prepare the failed sound
-    SoundBuffer reloadFailedBuffer;
-    reloadFailedBuffer.loadFromFile("sound/reloadFailed.wav");
-    Sound reloadFailed;
-    reloadFailed.setBuffer(reloadFailedBuffer);
     // Prepare the powerup sound
     SoundBuffer powerupBuffer;
     powerupBuffer.loadFromFile("sound/powerup.wav");
@@ -231,6 +202,21 @@ int main()
     pickupBuffer.loadFromFile("sound/coin.wav");
     Sound pickup;
     pickup.setBuffer(pickupBuffer);
+    // Prepare the pickup sound
+    SoundBuffer bombBuffer;
+    bombBuffer.loadFromFile("sound/bomb.wav");
+    Sound bomb;
+    bomb.setBuffer(bombBuffer);
+    // Prepare the pickup sound
+    SoundBuffer countBuffer;
+   countBuffer.loadFromFile("sound/countdown.wav");
+    Sound count;
+    count.setBuffer(countBuffer);
+    // Prepare the hit sound
+    SoundBuffer hitBuffer;
+    hitBuffer.loadFromFile("sound/hit.wav");
+    Sound hit;
+    hit.setBuffer(hitBuffer);
 
     // The main game loop
     while (window.isOpen())
@@ -257,7 +243,7 @@ int main()
                     state == State::PAUSED)
                 {
                     state = State::PLAYING;
-                    // Reset the clock so there isn't a frame jump
+                    // clock reset
                     clock.restart();
                 }
                 // Start a new game while in GAME_OVER state
@@ -286,19 +272,19 @@ int main()
                             // Plenty of bullets. Reload.
                             bulletsInClip = clipSize;
                             bulletsSpare -= clipSize;
-                            reload.play();
+                            //reload.play();
                         }
                         else if (bulletsSpare > 0)
                         {
                             // Only few bullets left
                             bulletsInClip = bulletsSpare;
                             bulletsSpare = 0;
-                            reload.play();
+                            //reload.play();
                         }
                         else
                         {
                             // More here soon?!
-                            reloadFailed.play();
+                            //reloadFailed.play();
                         }
                     }
 
@@ -313,74 +299,41 @@ int main()
         // Handle WASD while playing
         if (state == State::PLAYING)
         {
+
+
+            // Handle the pressing and releasing of the WASD keys
+            if (Keyboard::isKeyPressed(Keyboard::W))
+            {
+                player.moveUp();
+                //hit.play();
+            }
+
+            if (Keyboard::isKeyPressed(Keyboard::S))
+            {
+                player.moveDown();
+                //hit.play();
+            }
+
+            if (Keyboard::isKeyPressed(Keyboard::A))
+            {
+                player.moveLeft();
+                //hit.play();
+            }
+
+            if (Keyboard::isKeyPressed(Keyboard::D))
+            {
+                player.moveRight();
+                //hit.play();
+            }
+
             /*
-            // Handle the pressing and releasing of the WASD keys
-            if (Keyboard::isKeyPressed(Keyboard::W))
-            {
-                player.moveUp();
-            }
-            else
-            {
-                player.stopUp();
-            }
-            if (Keyboard::isKeyPressed(Keyboard::S))
-            {
-                player.moveDown();
-            }
-            else
-            {
-                player.stopDown();
-            }
-            if (Keyboard::isKeyPressed(Keyboard::A))
-            {
-                player.moveLeft();
-            }
-            else
-            {
-                player.stopLeft();
-            }
-            if (Keyboard::isKeyPressed(Keyboard::D))
-            {
-                player.moveRight();
-            }
-            else
-            {
-                player.stopRight();
-            }
-            */
-
-            // Handle the pressing and releasing of the WASD keys
-            if (Keyboard::isKeyPressed(Keyboard::W))
-            {
-                player.moveUp();
-                //hit.play();
-            }
-
-            if (Keyboard::isKeyPressed(Keyboard::S))
-            {
-                player.moveDown();
-                //hit.play();
-            }
-
-            if (Keyboard::isKeyPressed(Keyboard::A))
-            {
-                player.moveLeft();
-                //hit.play();
-            }
-
-            if (Keyboard::isKeyPressed(Keyboard::D))
-            {
-                player.moveRight();
-                //hello.spawn();
-                //hit.play();
-            }
-
+            
             // Fire a bullet
             if (Mouse::isButtonPressed(sf::Mouse::Left))
             {
                 if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate && bulletsInClip > 0)
                 {
-                    // Pass the centre of the player 
+                    // Pass the centre of the player
                     // and the centre of the cross-hair
                     // to the shoot function
                     bullets[currentBullet].shoot(
@@ -396,6 +349,11 @@ int main()
                     bulletsInClip--;
                 }
             }// End fire a bullet
+            
+            
+            */
+
+            
 
         }// End WASD while playing
         // Handle the LEVELING up state
@@ -517,10 +475,10 @@ int main()
                             {
                                 // Not just a hit but a kill too
                                 score += 10;
-                                if (score >= hiScore)
-                                {
-                                    hiScore = score;
-                                }
+                                //if (score >= hiScore)
+                                //{
+                                //    hiScore = score;
+                                //}
                                 numZombiesAlive--;
                                 // When all the zombies are dead (again)
                                 if (numZombiesAlive == 0) {
@@ -529,7 +487,7 @@ int main()
                             }
 
                             // Make a splat sound
-                            splat.play();
+                            //splat.play();
 
                         }
                     }
@@ -543,14 +501,14 @@ int main()
                         if (player.hit(gameTimeTotal))
                         {
                             // More here later
-                            hit.play();
+                            bomb.play();
                         }
                         if (player.getHealth() <= 0)
                         {
-                            std::ofstream outputFile("gamedata/scores.txt");
+                            //std::ofstream outputFile("gamedata/scores.txt");
                             // << writes the data
-                            outputFile << hiScore;
-                            outputFile.close();
+                            //outputFile << hiScore;
+                            //outputFile.close();
                             
                             state = State::GAME_OVER;
                         }
@@ -570,7 +528,7 @@ int main()
                 {
                     bulletsSpare += ammoPickup.gotIt();
                     // Play a sound
-                    reload.play();
+                    pickup.play();
 
                 }
 
@@ -597,7 +555,7 @@ int main()
                     ssScore << "Score:" << score;
                     scoreText.setString(ssScore.str());
                     // Update the high score text
-                    ssHiScore << "Hi Score:" << hiScore;
+                    //ssHiScore << "Hi Score:" << hiScore;
                     hiScoreText.setString(ssHiScore.str());
                     // Update the wave
                     ssWave << "Wave:" << wave;
@@ -669,8 +627,8 @@ int main()
             window.draw(scoreText);
             window.draw(hiScoreText);
             window.draw(healthBar);
-            window.draw(waveNumberText);
-            window.draw(zombiesRemainingText);
+            //window.draw(waveNumberText);
+            //window.draw(zombiesRemainingText);
 
         }
         if (state == State::LEVELING_UP)
