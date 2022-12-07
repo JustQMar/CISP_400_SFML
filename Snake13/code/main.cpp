@@ -47,8 +47,6 @@ int main()
     IntRect arena;
 
     // Create the background
-    // VertexArray background;
-    // Load the texture for our background vertex array
     Texture textureBackground;
     textureBackground.loadFromFile("graphics/grass.png");
     Sprite spriteBackground;
@@ -64,9 +62,6 @@ int main()
     Bullet bullets[100];
     int currentBullet = 0;
     int bulletsSpare = 24;
-    int bulletsInClip = 6;
-    int clipSize = 6;
-    float fireRate = 1;
     // When was the fire button last pressed?
     Time lastPressed;
 
@@ -75,10 +70,9 @@ int main()
     Pickup bombPickup(2);
 
     // About the game
-    int score = 0;
-    //int hiScore = 0;
+    int Score = 0;
 
-    // For the home/game over screen
+    // For the home or game over screen
     Sprite spriteStartGame;
     Texture textureStartGame = TextureHolder::GetTexture("graphics/background.jpg");
     spriteStartGame.setTexture(textureStartGame);
@@ -86,13 +80,7 @@ int main()
 
     // Create a view for the HUD
     View hudView(sf::FloatRect(0, 0, 1920, 1080));
-    // Create a sprite for the ammo icon
-    //Sprite spriteAmmoIcon;
-    //Texture textureAmmoIcon = TextureHolder::GetTexture(
-    //"graphics/ammo_icon.png");
-    //spriteAmmoIcon.setTexture(textureAmmoIcon);
-    //spriteAmmoIcon.setPosition(20, 980);
-    // Load the font
+
     Font font;
     font.loadFromFile("fonts/KOMIKAP_.ttf");
     // Paused
@@ -119,12 +107,13 @@ int main()
 
 
     int SnakeHealth = 3;
+    int score = 0;
 
     Text ammoText;
     ammoText.setFont(font);
     ammoText.setCharacterSize(55);
     ammoText.setFillColor(Color::White);
-    ammoText.setPosition(200, 980);
+    ammoText.setPosition(20, 980);
    
 
     // Score
@@ -134,14 +123,6 @@ int main()
     scoreText.setFillColor(Color::White);
     scoreText.setPosition(20, 0);
 
-    // Load the high score from a text file
-    std::ifstream inputFile("gamedata/scores.txt");
-    if (inputFile.is_open())
-    {
-        // >> Reads the data
-        //inputFile >> hiScore;
-        //inputFile.close();
-    }
 
     // Hi Score
     Text hiScoreText;
@@ -158,11 +139,6 @@ int main()
     RectangleShape healthBar;
     healthBar.setFillColor(Color::Red);
     healthBar.setPosition(450, 980);
-
-    // When did we last update the HUD?
-    //int framesSinceLastHUDUpdate = 0;
-    // How often (in frames) should we update the HUD
-    //int fpsMeasurementFrameInterval = 1000;
 
     float msSinceLastHUDUpdate = 0;
     float msHUDFrameInterval = 1000;
@@ -194,6 +170,13 @@ int main()
     hit.setBuffer(hitBuffer);
 
     
+    Texture textureBoom;
+    textureBoom.loadFromFile("graphics/tree.png");
+    Sprite spriteBoom;
+    spriteBoom.setTexture(textureBoom);
+
+    //spriteBoom.setPosition(810, 0);
+
 
 
     // The main game loop
@@ -231,6 +214,7 @@ int main()
                 {
 
                     // Prepare health
+                    Score = 0;
                     SnakeHealth = 3;
                     // Reset the player's stats
                     //player.resetPlayerStats();
@@ -242,9 +226,8 @@ int main()
                     state == State::GAME_OVER)
                 {
                     // Prepare health
+                    Score = 0;
                     SnakeHealth = 3;
-                    // Reset the player's stats
-                    //player.resetPlayerStats();
                     state = State::LEVELING_UP;
                 }
 
@@ -258,7 +241,6 @@ int main()
         // Handle WASD while playing
         if (state == State::PLAYING)
         {
-
 
             // Handle the pressing and releasing of the WASD keys
             if (Keyboard::isKeyPressed(Keyboard::W))
@@ -302,10 +284,6 @@ int main()
                 arena.height = resolution.y - 50;
                 arena.left = 50;
                 arena.top = 50;
-
-                // Pass the vertex array by reference 
-                // to the createBackground function
-                //int tileSize = createBackground(background, arena);
 
                 // Spawn the player in the middle of the arena
                 player.spawn(arena, resolution);//, tileSize);
@@ -371,6 +349,7 @@ int main()
                 if (player.getPosition().intersects(coinPickup1.getPosition()) && coinPickup1.isSpawned())
                 {
                     player.increaseHealthLevel(coinPickup1.gotIt());
+                    Score += 1;
                     pickup.play();
 
                 }
@@ -380,12 +359,18 @@ int main()
                 {
                     bulletsSpare += bombPickup.gotIt();
                     SnakeHealth -= 1;
+
                     bomb.play();
+
+                    bombPickup.getPosition();
+                    spriteBoom.setPosition(810, 0);
+
 
                     if (SnakeHealth <= 0)
                     {
                         state = State::GAME_OVER;
                     }
+
 
                 }
 
@@ -400,7 +385,7 @@ int main()
                     std::stringstream ssWave;
                     std::stringstream ssZombiesAlive;
                     // Update the ammo text
-                    ssAmmo << SnakeHealth; //<< "/" << bulletsSpare;
+                    ssAmmo << "Life:" << SnakeHealth; 
                     ammoText.setString(ssAmmo.str());
                     // Update the score text
                     ssScore << "Score:" << score;
@@ -430,31 +415,18 @@ int main()
 
         if (state == State::PLAYING)
         {
-            // set the mainView to be displayed in the window
-            // And draw everything related to it
+            // set mainView in the window
             window.setView(mainView);
-            // Draw the background
-            //window.draw(background, &textureBackground);
+            // Draw background
             window.draw(spriteBackground);
 
-            // Draw the zombies
-            for (int i = 0; i < numZombies; i++)
-            {
-                window.draw(zombies[i].getSprite());
-            }
-            for (int i = 0; i < 100; i++)
-            {
-                if (bullets[i].isInFlight())
-                {
-                    window.draw(bullets[i].getShape());
-                }
-            }
 
             // Draw the pick-ups, if currently spawned
             if (bombPickup.isSpawned())
             {
                 window.draw(bombPickup.getSprite());
             }
+
 
             if (coinPickup1.isSpawned())
             {
@@ -465,27 +437,20 @@ int main()
             // Draw the player
             window.draw(player.getSprite());
 
-            //Draw the crosshair
-            //window.draw(spriteCrosshair);
-
             // Switch to the HUD view
             window.setView(hudView);
 
             // Draw all the HUD elements
-            //window.draw(spriteAmmoIcon);
             window.draw(ammoText);
             window.draw(scoreText);
             window.draw(hiScoreText);
             window.draw(healthBar);
-            //window.draw(waveNumberText);
-            //window.draw(zombiesRemainingText);
 
         }
         if (state == State::LEVELING_UP)
         {
             window.setView(hudView);
             window.draw(spriteStartGame);
-            //window.draw(levelUpText);
         }
         if (state == State::PAUSED)
         {
@@ -502,11 +467,9 @@ int main()
         }
         if (state == State::GAME_OVER)
         {
-            //window.setView(hudView);
-            //window.draw(spriteStartGame);
             window.draw(gameOverText);
             window.draw(scoreText);
-            //window.draw(hiScoreText);
+
         }
         window.display();
 
